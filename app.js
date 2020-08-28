@@ -18,6 +18,10 @@ app.use(morgan('tiny'));
 // setting up a static directory for static files
 app.use(express.static(path.join(__dirname, '/public/')));
 
+// setup views and template engines
+app.set('views', './src/views');
+app.set('view engine', 'ejs');
+
 // for css files also check here if not in public folder
 app.use('/css', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/css')));
 // for js and jquery files check here if not in public folder
@@ -25,7 +29,12 @@ app.use('/js', express.static(path.join(__dirname, '/node_modules/bootstrap/dist
 app.use('/js', express.static(path.join(__dirname, '/node_modules/jquery/dist')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/index.html'));
+  res.render('index',
+    {
+      nav: [{ link: '/books', title: 'Books' },
+        { link: '/authors', title: 'Authors' }],
+      title: 'Library'
+    });
 });
 
 app.listen(port, () => {
